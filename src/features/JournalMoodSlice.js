@@ -16,6 +16,7 @@ const initialState = {
     {
       id: 1,
       emoji: "😟",
+      addedAt: new Date().toISOString()
     },
   ],
   FavoriteQuotes: parsedData?.FavoriteQuotes || [],
