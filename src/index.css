@@ -1,0 +1,72 @@
+@import "tailwindcss";
+@custom-variant dark (&:where(.dark, .dark *));
+
+.custom-time-panel .p-timepicker {
+  display: flex !important;
+  flex-direction: row !important;
+  justify-content: space-around !important;
+  align-items: center !important;
+  gap: 16px !important;
+  padding: 12px !important;
+  background-color: white;
+}
+
+/* Each column (hour/min/sec/ampm) */
+.custom-time-panel .p-timepicker > div {
+  display: flex !important;
+  flex-direction: column !important;
+  align-items: center !important;
+}
+
+/* Buttons */
+.custom-time-panel .p-timepicker button {
+  border-radius: 8px !important;
+  transition: 0.2s !important;
+}
+
+.custom-time-panel .p-timepicker button:hover {
+  background: #dcfce7 !important; /* emerald-100 */
+}
+
+/* Selected item */
+.custom-time-panel .p-highlight {
+  background: #10b981 !important; /* emerald-500 */
+  color: white !important;
+  border-radius: 6px !important;
+}
+
+.dark .p-editor-container {
+  background: #0f172a;
+  border-color: #334155;
+}
+
+.dark .p-editor-toolbar {
+  background: #1e293b;
+  border-color: #334155;
+}
+
+.dark .p-editor-content {
+  background: #0f172a;
+}
+
+.dark .ql-editor {
+  background: #0f172a;
+  color: #e2e8f0;
+}
+
+.dark .ql-stroke {
+  stroke: #e2e8f0 !important;
+}
+
+.dark .ql-fill {
+  fill: #e2e8f0 !important;
+}
+
+.dark .ql-picker-label {
+  color: #e2e8f0 !important;
+}
+
+.dark .ql-picker-options {
+  background: #1e293b !important;
+  color: #e2e8f0 !important;
+}
