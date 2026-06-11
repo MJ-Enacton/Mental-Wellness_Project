@@ -69,16 +69,16 @@ export default function Calendar() {
         {days.map((day, idx) => {
           const isCurrentMonth = isSameMonth(day, currentMonth);
           const isSelected = isSameDay(day, selectedDate);
-
+          const isGreaterThanToday = day > new Date();
           return (
             <button
               key={idx}
               onClick={() => isCurrentMonth && setSelectedDate(day)}
-              disabled={!isCurrentMonth}
+              disabled={!isCurrentMonth || isGreaterThanToday}
               className={`
                 h-10 w-10 mx-auto flex items-center justify-center text-sm rounded-full transition-all
-                ${!isCurrentMonth ? "text-gray-200 cursor-not-allowed" : ""}
-                ${isCurrentMonth && !isSelected ? "text-gray-700 hover:bg-indigo-50 hover:text-indigo-600" : ""}
+                ${!isCurrentMonth || isGreaterThanToday ? "text-gray-200 cursor-not-allowed" : ""}
+                ${isCurrentMonth && !isSelected && !isGreaterThanToday ? "text-gray-700 hover:bg-indigo-50 hover:text-indigo-600" : ""}
                 ${isSelected ? "bg-indigo-600 text-white font-semibold shadow-md shadow-indigo-200" : ""}
               `}
             >
