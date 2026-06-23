@@ -1,7 +1,9 @@
-import React, { useEffect, useState } from "react";
-import Calendar from "./Calendar";
-import { Link } from "react-router";
+import { useState } from "react";
+import { useNavigate } from "react-router";
 import { useSelector } from "react-redux";
+import RecentActivities from "./RecentActivities";
+import RecentJournals from "./RecentJournals";
+import { TbNotebook, TbMoodSmile, TbSparkles } from "react-icons/tb";
 
 const prompts = [
   "What is something you're looking forward to today?",
@@ -24,182 +26,136 @@ const prompts = [
   "What is one habit you'd like to strengthen?",
   "What is something that feels important to you right now?",
   "What would make today feel meaningful?",
-  "What's on your mind today?",
-  "What lifted your mood today?",
-  "What challenged you today?",
-  "What inspired you recently?",
-  "What are you avoiding right now?",
-  "What feels good today?",
-  "What do you need most today?",
-  "What are you curious about today?",
-  "What energized you recently?",
-  "What would help you feel lighter today?",
 ];
 
 const Home = () => {
-  const [filteredJournal, setFilteredJournal] = useState([]);
+  const navigate = useNavigate();
   const [prompt, setPrompt] = useState(prompts[0]);
 
-  const selectedDate = useSelector((state) => state.selectedDate);
-  const journal = useSelector((state) => state.Journal);
-
-  useEffect(() => {
-    setFilteredJournal(journal.filter((j) => j.createdAt === selectedDate));
-  }, [selectedDate, journal]);
+  const journals = useSelector((state) => state.Journal);
+  const moods = useSelector((state) => state.Mood);
 
   const refreshPrompt = () => {
     const random = prompts[Math.floor(Math.random() * prompts.length)];
     setPrompt(random);
   };
 
-  return (
-    <div className="px-4 sm:px-6 lg:px-10 py-10 mt-10 text-slate-800 dark:text-slate-100 transition-colors duration-300 w-8/10 mx-auto">
-      {/* Hero Section */}
-      <section className="grid lg:grid-cols-2 gap-10 items-center mb-12">
-        <div className="space-y-6">
-          <span className="inline-block text-emerald-600 dark:text-emerald-400 font-medium tracking-wide">
-            YOUR WELLNESS JOURNAL
-          </span>
+  const stats = [
+    {
+      icon: <TbNotebook className="text-emerald-600 dark:text-emerald-400 text-xl" />,
+      label: "Journal Entries",
+      value: journals.length,
+      bg: "bg-emerald-50 dark:bg-emerald-900/20",
+    },
+    {
+      icon: <TbMoodSmile className="text-sky-600 dark:text-sky-400 text-xl" />,
+      label: "Mood Logs",
+      value: moods.length,
+      bg: "bg-sky-50 dark:bg-sky-900/20",
+    },
+  ];
 
-          <h1 className="text-4xl sm:text-5xl lg:text-6xl font-bold leading-tight">
-            Reflect.
+  return (
+    <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-10 pb-16 text-slate-800 dark:text-slate-100 transition-colors duration-300">
+
+      {/* HERO */}
+      <section className="grid lg:grid-cols-2 gap-8 xl:gap-12 items-center mb-12">
+        <div>
+          {/* Label */}
+          <div className="inline-flex items-center gap-2 px-3 py-1.5 rounded-full bg-emerald-50 dark:bg-emerald-900/30 border border-emerald-200 dark:border-emerald-800 mb-5">
+            <TbSparkles className="text-emerald-500 text-sm" />
+            <span className="text-xs font-semibold tracking-widest uppercase text-emerald-600 dark:text-emerald-400">
+              Wellness Journal
+            </span>
+          </div>
+
+          <h1 className="text-4xl sm:text-5xl lg:text-6xl font-bold leading-tight tracking-tight">
+            Understand Yourself
             <br />
-            Grow.
-            <br />
-            Find Clarity.
+            <span className="text-emerald-500">One Entry</span> at a Time.
           </h1>
 
-          <p className="text-lg text-slate-600 dark:text-slate-300 max-w-2xl">
-            Capture your thoughts, track your emotions, and build a healthier
-            relationship with your mind—one entry at a time.
+          <p className="mt-5 text-base sm:text-lg leading-relaxed text-slate-500 dark:text-slate-400 max-w-xl">
+            Journal your thoughts, track emotional patterns, and build a
+            healthier relationship with your mind through consistent reflection.
           </p>
 
-          <div className="flex flex-wrap gap-4">
+          {/* Stat pills */}
+          <div className="flex flex-wrap gap-3 mt-6">
+            {stats.map((s) => (
+              <div
+                key={s.label}
+                className={`flex items-center gap-2.5 px-4 py-2.5 rounded-xl ${s.bg} border border-transparent`}
+              >
+                {s.icon}
+                <div>
+                  <p className="text-xs text-slate-500 dark:text-slate-400 leading-none mb-0.5">{s.label}</p>
+                  <p className="text-lg font-bold leading-none text-slate-800 dark:text-white">{s.value}</p>
+                </div>
+              </div>
+            ))}
+          </div>
+
+          {/* CTA Buttons */}
+          <div className="flex flex-wrap gap-3 mt-7">
             <button
-              className="
-                px-6 py-3 rounded-full
-                bg-emerald-500 hover:bg-emerald-600
-                text-white shadow-sm
-                transition-all duration-300
-              "
+              onClick={() => navigate("/addjournal")}
+              className="px-6 py-3 rounded-xl bg-emerald-600 hover:bg-emerald-700 text-white text-sm font-semibold shadow-lg shadow-emerald-500/25 hover:shadow-emerald-500/40 transition-all duration-200 cursor-pointer active:scale-95"
             >
-              New Journal
+              Start Writing
             </button>
-
             <button
-              className="
-                px-6 py-3 rounded-full
-                border border-slate-300
-                text-slate-700
-                hover:border-slate-400
-
-                dark:bg-slate-800
-                dark:border-slate-600
-                dark:text-slate-200
-                dark:hover:bg-slate-700
-
-                transition-all duration-300
-              "
+              onClick={() => navigate("/moods")}
+              className="px-6 py-3 rounded-xl border border-slate-300 dark:border-zinc-700 text-sm font-medium text-slate-700 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-zinc-800 hover:border-slate-400 dark:hover:border-zinc-600 transition-all duration-200 cursor-pointer"
             >
-              Track Mood
+              Track Today's Mood
             </button>
           </div>
         </div>
 
-        {/* Reflection Card */}
-        <div
-          className="
-            rounded-3xl
-            p-8
-            shadow-sm
-            border border-white/20
-            backdrop-blur-md
+        {/* Prompt Card */}
+        <div className="rounded-2xl p-6 sm:p-8 border border-slate-200 dark:border-zinc-800 bg-white dark:bg-zinc-900 shadow-sm hover:shadow-md transition-shadow duration-300">
+          <div className="flex items-center gap-2 mb-1">
+            <div className="w-2 h-2 rounded-full bg-emerald-500 animate-pulse" />
+            <span className="text-xs font-semibold uppercase tracking-widest text-slate-400 dark:text-slate-500">
+              Daily Reflection
+            </span>
+          </div>
 
-            dark:bg-slate-900/80
-            dark:border-slate-700
-          "
-        >
-          <h2 className="text-xl font-semibold mb-5">Daily Reflection</h2>
+          <h2 className="text-lg font-semibold mt-3 mb-5 text-slate-800 dark:text-slate-100">
+            Today's Prompt
+          </h2>
 
-          <p className="text-lg italic leading-relaxed text-slate-600 dark:text-slate-300">
+          <p className="text-lg italic leading-relaxed text-slate-600 dark:text-slate-300 min-h-[80px]">
             "{prompt}"
           </p>
 
-          <button
-            onClick={refreshPrompt}
-            className="
-              mt-6
-              px-4 py-2
-              rounded-xl
-              border border-slate-300
-
-              dark:bg-slate-800
-              dark:border-slate-700
-
-              hover:scale-105
-              transition-all
-            "
-          >
-            New Question
-          </button>
+          <div className="flex gap-3 mt-8 flex-wrap">
+            <button
+              onClick={refreshPrompt}
+              className="px-4 py-2 text-sm rounded-xl border border-slate-200 dark:border-zinc-700 text-slate-600 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-zinc-800 transition-all duration-200 cursor-pointer"
+            >
+              New Prompt
+            </button>
+            <button
+              onClick={() => navigate("/addjournal")}
+              className="px-4 py-2 text-sm rounded-xl bg-emerald-600 hover:bg-emerald-700 text-white font-medium transition-all duration-200 cursor-pointer active:scale-95"
+            >
+              Write About This
+            </button>
+          </div>
         </div>
       </section>
 
-      {/* Main Content */}
-      <section className="grid lg:grid-cols-3 gap-8">
-        {/* Calendar */}
-        <Calendar />
-
-        {/* Recent Journals */}
-        <div
-          className="
-            lg:col-span-2
-            rounded-3xl
-            p-6
-            shadow-sm
-            backdrop-blur-sm
-
-            dark:bg-slate-900/80
-            dark:border-slate-700
-          "
-        >
-          <h2 className="text-xl font-semibold mb-6">Recent Journals</h2>
-
-          {filteredJournal?.length ? (
-            <div className="space-y-4">
-              {filteredJournal.map((d) => (
-                <div
-                  key={d.id}
-                  className="rounded-2xl p-5 border border-slate-200/50 dark:bg-slate-800 dark:border-slate-700 transition-colors duration-300"
-                >
-                  <div
-                    className="prose max-w-none text-slate-700 dark:text-slate-200 line-clamp-2"
-                    dangerouslySetInnerHTML={{ __html: d.text }}
-                  />
-
-                  <Link
-                    to={`/journals/${d.id}`}
-                    className="
-                    mt-3
-                    text-sm
-                    font-medium
-                    text-emerald-600
-                    hover:text-emerald-700
-                    dark:text-emerald-400
-                  "
-                  >
-                    View Journal →
-                  </Link>
-                </div>
-              ))}
-            </div>
-          ) : (
-            <div className="py-10 text-center">
-              <p className="text-slate-500 dark:text-slate-400">
-                No journal entries found for this date.
-              </p>
-            </div>
-          )}
+      {/* Bottom Section */}
+      <section>
+        <div className="flex items-center gap-3 mb-6">
+          <h2 className="text-xl font-bold text-slate-800 dark:text-slate-100">Your Activity</h2>
+          <div className="flex-1 h-px bg-slate-200 dark:bg-zinc-800" />
+        </div>
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+          <RecentActivities />
+          <RecentJournals />
         </div>
       </section>
     </div>

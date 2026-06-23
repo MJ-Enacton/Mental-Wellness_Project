@@ -18,7 +18,6 @@ export default function Calendar() {
   const [currentMonth, setCurrentMonth] = useState(new Date());
   const [selectedDate, setSelectedDate] = useState(new Date());
 
-  // Generate date parameters
   const monthStart = startOfMonth(currentMonth);
   const monthEnd = endOfMonth(monthStart);
   const startDate = startOfWeek(monthStart);
@@ -30,35 +29,38 @@ export default function Calendar() {
   }, [selectedDate]);
 
   const days = eachDayOfInterval({ start: startDate, end: endDate });
-
-  const weekDays = ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"];
+  const weekDays = ["Su", "Mo", "Tu", "We", "Th", "Fr", "Sa"];
 
   return (
-    <div className="max-w-md mx-auto bg-white shadow-lg rounded-xl overflow-hidden p-6 border border-gray-100">
-      <div className="flex items-center justify-between mb-6">
-        <h2 className="text-lg font-semibold text-gray-800">
+    <div className="w-full bg-white dark:bg-zinc-800 rounded-xl border border-slate-200 dark:border-zinc-700 p-4 shadow-sm">
+      {/* Month navigation */}
+      <div className="flex items-center justify-between mb-4">
+        <h2 className="text-sm font-semibold text-slate-700 dark:text-slate-200">
           {format(currentMonth, "MMMM yyyy")}
         </h2>
-        <div className="flex space-x-2">
+        <div className="flex gap-1">
           <button
             onClick={() => setCurrentMonth(subMonths(currentMonth, 1))}
-            className="p-2 hover:bg-gray-100 rounded-lg text-gray-600 transition"
+            className="w-7 h-7 flex items-center justify-center rounded-lg text-slate-500 dark:text-slate-400 hover:bg-slate-100 dark:hover:bg-zinc-700 text-sm transition-colors duration-150 cursor-pointer"
           >
-            &larr;
+            ‹
           </button>
           <button
             onClick={() => setCurrentMonth(addMonths(currentMonth, 1))}
-            className="p-2 hover:bg-gray-100 rounded-lg text-gray-600 transition"
+            className="w-7 h-7 flex items-center justify-center rounded-lg text-slate-500 dark:text-slate-400 hover:bg-slate-100 dark:hover:bg-zinc-700 text-sm transition-colors duration-150 cursor-pointer"
           >
-            &rarr;
+            ›
           </button>
         </div>
       </div>
 
-      {/* Weekday Labels */}
-      <div className="grid grid-cols-7 gap-1 text-center font-medium text-xs text-gray-400 mb-2">
+      {/* Weekday labels */}
+      <div className="grid grid-cols-7 gap-1 mb-1">
         {weekDays.map((day) => (
-          <div key={day} className="py-1">
+          <div
+            key={day}
+            className="text-center text-[10px] font-semibold text-slate-400 dark:text-slate-500 uppercase py-1"
+          >
             {day}
           </div>
         ))}
@@ -69,17 +71,21 @@ export default function Calendar() {
         {days.map((day, idx) => {
           const isCurrentMonth = isSameMonth(day, currentMonth);
           const isSelected = isSameDay(day, selectedDate);
-          const isGreaterThanToday = day > new Date();
+          const isFuture = day > new Date();
+
           return (
             <button
               key={idx}
-              onClick={() => isCurrentMonth && setSelectedDate(day)}
-              disabled={!isCurrentMonth || isGreaterThanToday}
+              onClick={() => isCurrentMonth && !isFuture && setSelectedDate(day)}
+              disabled={!isCurrentMonth || isFuture}
               className={`
-                h-10 w-10 mx-auto flex items-center justify-center text-sm rounded-full transition-all
-                ${!isCurrentMonth || isGreaterThanToday ? "text-gray-200 cursor-not-allowed" : ""}
-                ${isCurrentMonth && !isSelected && !isGreaterThanToday ? "text-gray-700 hover:bg-indigo-50 hover:text-indigo-600" : ""}
-                ${isSelected ? "bg-indigo-600 text-white font-semibold shadow-md shadow-indigo-200" : ""}
+                h-8 w-full flex items-center justify-center text-xs rounded-lg transition-all duration-150
+                ${!isCurrentMonth || isFuture
+                  ? "text-slate-200 dark:text-zinc-700 cursor-not-allowed"
+                  : isSelected
+                  ? "bg-emerald-500 text-white font-semibold shadow-sm"
+                  : "text-slate-600 dark:text-slate-300 hover:bg-emerald-50 dark:hover:bg-emerald-900/20 hover:text-emerald-600 dark:hover:text-emerald-400 cursor-pointer"
+                }
               `}
             >
               {format(day, "d")}

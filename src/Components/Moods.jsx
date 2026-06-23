@@ -4,8 +4,18 @@ import MyCalendar from "./Calendar";
 import { useDispatch, useSelector } from "react-redux";
 import { MoodLineChart } from "./MoodLineChart";
 import "../index.css";
-import { newMood, deleteMood } from "../features/JournalMoodSlice";
+import { newMood, deleteMood, addActivity } from "../features/JournalMoodSlice";
 import toast, { Toaster } from "react-hot-toast";
+import { MdDelete } from "react-icons/md";
+import { TbMoodSmile } from "react-icons/tb";
+
+const moodLabels = {
+  "😁": "Great",
+  "😊": "Good",
+  "😐": "Okay",
+  "😕": "Low",
+  "😢": "Sad",
+};
 
 const Moods = () => {
   const moods = useSelector((state) => state.Mood);
@@ -21,7 +31,6 @@ const Moods = () => {
   const moodsForSelectedDate = moods
     .filter((mood) => {
       if (!mood.addedAt) return false;
-
       return (
         new Date(mood.addedAt).toISOString().split("T")[0] === selectedDate
       );
@@ -43,13 +52,18 @@ const Moods = () => {
     if (!canAddMood()) return;
 
     const timePart = time.toTimeString().split(" ")[0];
-
-    const moodDateTime = new Date(`${selectedDate}T${timePart}`);
-
+    const moodDateTime = `${selectedDate}T${timePart}`;
     dispatch(
       newMood({
         emoji: selectedMood,
-        addedAt: moodDateTime.toISOString(),
+        addedAt: moodDateTime,
+      }),
+    );
+
+    dispatch(
+      addActivity({
+        type: "mood_added",
+        message: `Logged mood as ${selectedMood}`,
       }),
     );
 
@@ -60,212 +74,174 @@ const Moods = () => {
   };
 
   return (
-    <div
-      className="
-        mt-15
-        p-3 sm:p-6
-        flex items-center justify-center
-        transition-colors duration-300
-      "
-    >
-      <div
-        className="
-          w-full max-w-6xl dark:bg-slate-900/70 backdrop-blur-xl rounded-3xl shadow-xl border border-white/50 dark:border-slate-800 p-4 sm:p-6 md:p-8
-        "
-      >
-        <div className="grid grid-cols-1 lg:grid-cols-[320px_1fr] gap-6 md:gap-8">
-          {/* Mood Input Card */}
-          <div
-            className="
-              bg-white/60 dark:bg-slate-900/60
-              rounded-2xl
-              p-6
-              shadow-sm
-              border border-emerald-100 dark:border-slate-800
-            "
-          >
-            <h2 className="text-lg font-semibold text-slate-700 dark:text-slate-100 mb-2">
-              How are you feeling?
+    <div className="max-w-6xl mx-auto px-4 sm:px-6 py-8 sm:py-10 transition-colors duration-300">
+
+      {/* Page Header */}
+      <div className="mb-8">
+        <div className="flex items-center gap-2 mb-1">
+          <TbMoodSmile className="text-sky-500 text-xl" />
+          <span className="text-xs font-semibold uppercase tracking-widest text-slate-400 dark:text-slate-500">
+            Mood Tracker
+          </span>
+        </div>
+        <h1 className="text-3xl sm:text-4xl font-bold text-slate-800 dark:text-slate-100">
+          How Are You Feeling?
+        </h1>
+        <p className="mt-1.5 text-sm text-slate-500 dark:text-slate-400">
+          Log your mood and track your emotional patterns over time.
+        </p>
+      </div>
+
+      <div className="grid grid-cols-1 lg:grid-cols-[320px_1fr] gap-6">
+
+        {/* Left Panel: Mood Input */}
+        <div className="bg-white dark:bg-zinc-900 rounded-2xl border border-slate-200 dark:border-zinc-800 shadow-sm p-6 flex flex-col gap-5">
+          <div>
+            <h2 className="text-base font-semibold text-slate-700 dark:text-slate-100 mb-1">
+              Select Your Mood
             </h2>
-
-            <p className="text-sm text-slate-500 dark:text-slate-400 mb-6">
-              Select the mood that best matches your day.
+            <p className="text-xs text-slate-400 dark:text-slate-500">
+              Pick the emoji that best represents how you feel right now.
             </p>
+          </div>
 
-            <div className="grid grid-cols-5 gap-2 sm:gap-3 mb-5">
-              {emojis.map((emoji, index) => (
+          {/* Emoji Grid */}
+          <div className="grid grid-cols-5 gap-2">
+            {emojis.map((emoji, index) => (
+              <div key={index} className="flex flex-col items-center gap-1">
                 <button
-                  key={index}
                   onClick={() => setSelectedMood(emoji)}
                   className={`
-                    aspect-square
-                    rounded-2xl
-                    text-3xl
+                    w-full aspect-square
+                    rounded-2xl text-2xl sm:text-3xl
                     flex items-center justify-center
-                    cursor-pointer
-                    transition-all duration-300
-
+                    cursor-pointer transition-all duration-200
                     ${
                       selectedMood === emoji
-                        ? `
-                          bg-linear-to-br
-                          from-emerald-400
-                          to-sky-400
-                          shadow-lg
-                          shadow-emerald-200
-                          ring-4
-                          ring-emerald-100
-                          scale-105
-                        `
-                        : `
-                          bg-white dark:bg-slate-800
-                          hover:bg-emerald-50 dark:hover:bg-slate-700
-                          shadow-sm
-                          hover:scale-105
-                        `
+                        ? "bg-linear-to-br from-emerald-400 to-sky-400 shadow-lg shadow-emerald-200 dark:shadow-emerald-900/30 ring-2 ring-emerald-300 dark:ring-emerald-700 scale-105"
+                        : "bg-slate-50 dark:bg-zinc-800 hover:bg-emerald-50 dark:hover:bg-zinc-700 border border-slate-200 dark:border-zinc-700 hover:scale-105"
                     }
                   `}
                 >
                   {emoji}
                 </button>
-              ))}
-            </div>
+                <span className="text-[10px] text-slate-400 dark:text-slate-500 font-medium">
+                  {moodLabels[emoji]}
+                </span>
+              </div>
+            ))}
+          </div>
 
-            <div>
-              <p className="mb-2 text-slate-700 dark:text-slate-300">
-                Select Time
-              </p>
+          {/* Time Picker */}
+          <div>
+            <label className="block text-sm font-medium text-slate-700 dark:text-slate-300 mb-2">
+              Time of Entry
+            </label>
+            <Calendar
+              value={time}
+              onChange={(e) => setTime(e.value)}
+              timeOnly
+              appendTo="self"
+              inputClassName="h-11 w-full rounded-xl border border-slate-200 dark:border-zinc-700 bg-slate-50 dark:bg-zinc-800 text-slate-700 dark:text-slate-200 px-4 text-sm text-center focus:outline-none focus:ring-2 focus:ring-emerald-500/30"
+              pt={{
+                panel: {
+                  className: "custom-time-panel dark:bg-zinc-800 dark:text-slate-200",
+                },
+                timepicker: {
+                  className: "custom-timepicker dark:bg-zinc-800 dark:text-black",
+                },
+              }}
+            />
+          </div>
 
-              <Calendar
-                value={time}
-                onChange={(e) => setTime(e.value)}
-                timeOnly
-                appendTo="self"
-                inputClassName="
-                  h-11
-                  w-full
-                  rounded-xl
-                  border
-                  border-slate-200 dark:border-slate-700
-                  bg-white dark:bg-slate-800
-                  text-slate-700 dark:text-slate-200
-                  px-4
-                  shadow-sm
-                  focus:ring-4
-                  focus:ring-blue-100
-                  text-center
-                "
-                pt={{
-                  panel: {
-                    className:
-                      "custom-time-panel dark:bg-slate-800 dark:text-slate-200",
-                  },
-                  timepicker: {
-                    className:
-                      "custom-timepicker dark:bg-slate-800 dark:text-black",
-                  },
-                }}
-              />
-            </div>
+          {/* Save Button */}
+          <button
+            onClick={handleAddMood}
+            className="w-full cursor-pointer rounded-xl bg-emerald-600 hover:bg-emerald-700 px-6 py-3 text-sm font-semibold text-white shadow-md shadow-emerald-500/25 transition-all duration-200 hover:shadow-emerald-500/40 active:scale-95"
+          >
+            Log Mood
+          </button>
 
-            <div className="mt-6 flex justify-center">
-              <button
-                onClick={handleAddMood}
-                className="
-                  w-full
-                  cursor-pointer
-                  rounded-full
-                  bg-emerald-500
-                  px-6
-                  py-3
-                  text-sm sm:text-base
-                  font-medium
-                  text-white
-                  transition-all duration-300
-                  hover:bg-emerald-600
-                  hover:shadow-lg
-                  active:scale-95
-                "
-              >
-                Save Entry
-              </button>
-            </div>
-            <div className="mt-3">
-              <MyCalendar />
+          {/* Mini Calendar */}
+          <div className="pt-2 border-t border-slate-100 dark:border-zinc-800">
+            <p className="text-xs font-medium text-slate-400 dark:text-slate-500 mb-3 uppercase tracking-wider">
+              Select Date
+            </p>
+            <MyCalendar />
+          </div>
+        </div>
+
+        {/* Right Panel: Chart + Entries */}
+        <div className="bg-white dark:bg-zinc-900 rounded-2xl border border-slate-200 dark:border-zinc-800 shadow-sm p-6 flex flex-col gap-6">
+          <div>
+            <h2 className="text-base font-semibold text-slate-700 dark:text-slate-100">
+              Mood Insights
+            </h2>
+            <p className="text-xs text-slate-400 dark:text-slate-500 mt-0.5">
+              Your emotional distribution for the selected date.
+            </p>
+          </div>
+
+          {/* Chart */}
+          <div className="rounded-xl border border-slate-100 dark:border-zinc-800 bg-slate-50 dark:bg-zinc-800/40 p-3 sm:p-4">
+            <div className="h-56 sm:h-72">
+              <MoodLineChart />
             </div>
           </div>
 
-          {/* Chart Card */}
-          <div
-            className="
-              bg-white/60 dark:bg-slate-900/60
-              rounded-2xl
-              p-6
-              shadow-sm
-              border border-sky-100 dark:border-slate-800
-              flex flex-col
-            "
-          >
-            <div className="mb-4">
-              <h2 className="text-lg font-semibold text-slate-700 dark:text-slate-100">
-                Mood Insights
-              </h2>
+          {/* Mood Entries List */}
+          <div>
+            <h3 className="text-sm font-semibold text-slate-600 dark:text-slate-300 mb-3">
+              Entries for{" "}
+              <span className="text-emerald-600 dark:text-emerald-400">
+                {new Date(selectedDate).toLocaleDateString("en-US", {
+                  month: "long",
+                  day: "numeric",
+                  year: "numeric",
+                })}
+              </span>
+            </h3>
 
-              <p className="text-sm text-slate-500 dark:text-slate-400">
-                Your emotional distribution over time.
-              </p>
-            </div>
-
-            <div
-              className="
-                flex-1
-                rounded-2xl
-                border-2 border-dashed
-                border-sky-200 dark:border-slate-700
-                bg-linear-to-br
-                from-sky-50/60
-                to-emerald-50/60
-                dark:from-slate-900
-                dark:to-slate-800
-              "
-            >
-              <div className="w-full h-75 sm:h-100 md:h-125 lg:h-120 p-2 sm:p-4">
-                <MoodLineChart />
-                <div className="mt-4 px-4 pb-4">
-                  <h3 className="text-sm font-medium text-slate-600 dark:text-slate-300 mb-3">
-                    Mood Entries
-                  </h3>
-
-                  <div className="flex flex-wrap gap-2">
-                    {moodsForSelectedDate.map((mood) => (
-                      <div
-                        key={mood.id}
-                        className="inline-flex items-center gap-2 px-3 py-2 rounded-xl bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 shadow-xs"
-                      >
-                        <span className="text-lg">{mood.emoji}</span>
-
-                        <span className="text-xs text-slate-600 dark:text-slate-300">
+            {moodsForSelectedDate.length === 0 ? (
+              <div className="text-center py-8 text-slate-400 dark:text-slate-500">
+                <p className="text-sm">No mood entries for this date.</p>
+                <p className="text-xs mt-1">Log a mood using the panel on the left.</p>
+              </div>
+            ) : (
+              <div className="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-3 gap-2.5">
+                {moodsForSelectedDate.map((mood) => (
+                  <div
+                    key={mood.id}
+                    className="flex items-center justify-between gap-2 px-3 py-2.5 rounded-xl bg-slate-50 dark:bg-zinc-800 border border-slate-200 dark:border-zinc-700 hover:bg-white dark:hover:bg-zinc-700 transition-colors duration-200"
+                  >
+                    <div className="flex items-center gap-2.5">
+                      <span className="text-xl">{mood.emoji}</span>
+                      <div>
+                        <p className="text-xs font-medium text-slate-700 dark:text-slate-200">
+                          {moodLabels[mood.emoji] || "Mood"}
+                        </p>
+                        <p className="text-[10px] text-slate-400 dark:text-slate-500">
                           {new Date(mood.addedAt).toLocaleTimeString([], {
                             hour: "2-digit",
                             minute: "2-digit",
                           })}
-                        </span>
-
-                        <button
-                          onClick={() => dispatch(deleteMood(mood.id))}
-                          className="text-red-500 hover:text-red-600 text-sm cursor-pointer"
-                        >
-                          ✕
-                        </button>
+                        </p>
                       </div>
-                    ))}
+                    </div>
+                    <button
+                      onClick={() => dispatch(deleteMood(mood.id))}
+                      className="text-slate-300 dark:text-slate-600 hover:text-red-500 dark:hover:text-red-400 text-sm cursor-pointer transition-colors duration-200"
+                    >
+                      <MdDelete size={16} />
+                    </button>
                   </div>
-                </div>
+                ))}
               </div>
-            </div>
+            )}
           </div>
         </div>
       </div>
+
       <Toaster />
     </div>
   );
