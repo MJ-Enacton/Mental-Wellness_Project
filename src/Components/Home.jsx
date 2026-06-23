@@ -130,18 +130,12 @@ const Home = () => {
             "{prompt}"
           </p>
 
-          <div className="flex gap-3 mt-8 flex-wrap">
+          <div className="mt-8">
             <button
               onClick={refreshPrompt}
               className="px-4 py-2 text-sm rounded-xl border border-slate-200 dark:border-zinc-700 text-slate-600 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-zinc-800 transition-all duration-200 cursor-pointer"
             >
               New Prompt
-            </button>
-            <button
-              onClick={() => navigate("/addjournal")}
-              className="px-4 py-2 text-sm rounded-xl bg-emerald-600 hover:bg-emerald-700 text-white font-medium transition-all duration-200 cursor-pointer active:scale-95"
-            >
-              Write About This
             </button>
           </div>
         </div>

@@ -147,7 +147,7 @@ const JournalMoodSlice = createSlice({
           (q) => q.quote !== quote.quote,
         );
       } else {
-        state.FavoriteQuotes.push(quote);
+        state.FavoriteQuotes.unshift(quote);
       }
       localStorage.setItem("journalmood", JSON.stringify(state));
     },

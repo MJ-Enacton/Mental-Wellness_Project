@@ -130,7 +130,7 @@ const AllJournals = () => {
       {/* Toolbar */}
       <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 mb-6">
         {/* Search */}
-        <div className="relative flex-1 max-w-xs">
+        <div className="relative flex-1 max-w-sm">
           <TbSearch className="absolute left-3 top-1/2 -translate-y-1/2 text-slate-400 dark:text-slate-500 text-base" />
           <InputText
             value={searchTerm}
@@ -141,7 +141,7 @@ const AllJournals = () => {
         </div>
 
         {/* Filters + CTA */}
-        <div className="flex items-center gap-2 flex-wrap">
+        <div className="flex items-center gap-6 flex-wrap">
           <FilterDropdown
             value={filters.date}
             onChange={handleOnDateFilterChange}

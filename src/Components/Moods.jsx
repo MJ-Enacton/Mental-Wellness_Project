@@ -75,7 +75,6 @@ const Moods = () => {
 
   return (
     <div className="max-w-6xl mx-auto px-4 sm:px-6 py-8 sm:py-10 transition-colors duration-300">
-
       {/* Page Header */}
       <div className="mb-8">
         <div className="flex items-center gap-2 mb-1">
@@ -93,7 +92,6 @@ const Moods = () => {
       </div>
 
       <div className="grid grid-cols-1 lg:grid-cols-[320px_1fr] gap-6">
-
         {/* Left Panel: Mood Input */}
         <div className="bg-white dark:bg-zinc-900 rounded-2xl border border-slate-200 dark:border-zinc-800 shadow-sm p-6 flex flex-col gap-5">
           <div>
@@ -142,13 +140,16 @@ const Moods = () => {
               onChange={(e) => setTime(e.value)}
               timeOnly
               appendTo="self"
+              className="w-full"
               inputClassName="h-11 w-full rounded-xl border border-slate-200 dark:border-zinc-700 bg-slate-50 dark:bg-zinc-800 text-slate-700 dark:text-slate-200 px-4 text-sm text-center focus:outline-none focus:ring-2 focus:ring-emerald-500/30"
               pt={{
                 panel: {
-                  className: "custom-time-panel dark:bg-zinc-800 dark:text-slate-200",
+                  className:
+                    "custom-time-panel dark:bg-zinc-800 dark:text-slate-200",
                 },
                 timepicker: {
-                  className: "custom-timepicker dark:bg-zinc-800 dark:text-black",
+                  className:
+                    "custom-timepicker dark:bg-zinc-800 dark:text-black",
                 },
               }}
             />
@@ -205,7 +206,9 @@ const Moods = () => {
             {moodsForSelectedDate.length === 0 ? (
               <div className="text-center py-8 text-slate-400 dark:text-slate-500">
                 <p className="text-sm">No mood entries for this date.</p>
-                <p className="text-xs mt-1">Log a mood using the panel on the left.</p>
+                <p className="text-xs mt-1">
+                  Log a mood using the panel on the left.
+                </p>
               </div>
             ) : (
               <div className="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-3 gap-2.5">

@@ -15,9 +15,8 @@ const Footer = () => {
     <footer className="border-t border-slate-200 dark:border-zinc-800 bg-white dark:bg-zinc-950 transition-colors duration-300">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 py-10">
         <div className="flex flex-col sm:flex-row items-center justify-between gap-6">
-
           {/* Brand */}
-          <div className="flex flex-col items-center sm:items-start gap-1">
+          <div className="flex flex-col gap-1 w-full sm:w-auto items-start sm:items-center">
             <div className="flex items-center gap-2">
               <div className="w-7 h-7 rounded-lg bg-linear-to-br from-emerald-500 to-teal-600 flex items-center justify-center">
                 <TbBrain className="text-white text-sm" />
@@ -32,7 +31,7 @@ const Footer = () => {
           </div>
 
           {/* Nav links */}
-          <nav className="flex items-center gap-5 flex-wrap justify-center">
+          <nav className="flex flex-col sm:flex-row sm:items-center items-start w-full sm:w-auto gap-5 flex-wrap justify-center">
             {footerLinks.map(({ to, label }) => (
               <NavLink
                 key={to}
@@ -43,12 +42,14 @@ const Footer = () => {
               </NavLink>
             ))}
           </nav>
-
         </div>
 
         {/* Divider + bottom line */}
         <div className="mt-8 pt-6 border-t border-slate-100 dark:border-zinc-800 flex flex-col sm:flex-row items-center justify-between gap-3 text-xs text-slate-400 dark:text-slate-500">
-          <span>© {new Date().getFullYear()} MindJournal. Built with pure heart for mental wellness.</span>
+          <span>
+            © {new Date().getFullYear()} MindJournal. Built with pure heart for
+            mental wellness.
+          </span>
           <span>All your data is stored locally on your device.</span>
         </div>
       </div>
