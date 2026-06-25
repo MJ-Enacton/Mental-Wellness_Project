@@ -5,7 +5,7 @@ const parsedData = savedData ? JSON.parse(savedData) : null;
 
 const initialState = {
   // Providing static data at start
-  Journal: parsedData.Journal || [
+  Journal: parsedData?.Journal || [
     {
       "id": 1,
       "category": "Grateful",
@@ -49,7 +49,7 @@ const initialState = {
       "createdAt": "2026-06-16"
     }
   ],
-  Mood: parsedData.Mood || [
+  Mood: parsedData?.Mood || [
     {
       "id": 1,
       "emoji": "😟",
@@ -86,7 +86,7 @@ const initialState = {
       "addedAt": "2026-06-16T08:40:00.000Z"
     }
   ],
-  activities: parsedData.activities || [
+  activities: parsedData?.activities || [
     {
       id: 1,
       type: "journal_added",
