@@ -72,7 +72,7 @@ const RecentJournals = () => {
                 </span>
                 <span className="text-xs text-slate-400 dark:text-slate-500">
                   {new Date(entry.createdAt).toLocaleDateString("en-US", {
-                    month: "short",
+                    month: "long",
                     day: "numeric",
                   })}
                 </span>

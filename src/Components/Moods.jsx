@@ -8,14 +8,8 @@ import { newMood, deleteMood, addActivity } from "../features/JournalMoodSlice";
 import toast, { Toaster } from "react-hot-toast";
 import { MdDelete } from "react-icons/md";
 import { TbMoodSmile } from "react-icons/tb";
-
-const moodLabels = {
-  "😁": "Great",
-  "😊": "Good",
-  "😐": "Okay",
-  "😕": "Low",
-  "😢": "Sad",
-};
+import AnalyticalMood from "./AnalyticalMood";
+import { moodLabels } from "../Data/mood";
 
 const Moods = () => {
   const moods = useSelector((state) => state.Mood);
@@ -133,7 +127,8 @@ const Moods = () => {
           {/* Time Picker */}
           <div>
             <label className="block text-sm font-medium text-slate-700 dark:text-slate-300 mb-2">
-              Time of Entry
+              Time Entry{" "}
+              <span className="text-slate-400 text-[10px]">(24h Format)</span>
             </label>
             <Calendar
               value={time}
@@ -164,7 +159,7 @@ const Moods = () => {
           </button>
 
           {/* Mini Calendar */}
-          <div className="pt-2 border-t border-slate-100 dark:border-zinc-800">
+          <div className="pt-2 h-full flex flex-col justify-center border-t border-slate-100 dark:border-zinc-800">
             <p className="text-xs font-medium text-slate-400 dark:text-slate-500 mb-3 uppercase tracking-wider">
               Select Date
             </p>
@@ -182,14 +177,15 @@ const Moods = () => {
               Your emotional distribution for the selected date.
             </p>
           </div>
-
           {/* Chart */}
+          <div className="mt-1">
+            <AnalyticalMood />
+          </div>
           <div className="rounded-xl border border-slate-100 dark:border-zinc-800 bg-slate-50 dark:bg-zinc-800/40 p-3 sm:p-4">
-            <div className="h-56 sm:h-72">
+            <div className="h-64 sm:h-72">
               <MoodLineChart />
             </div>
           </div>
-
           {/* Mood Entries List */}
           <div>
             <h3 className="text-sm font-semibold text-slate-600 dark:text-slate-300 mb-3">
@@ -205,17 +201,25 @@ const Moods = () => {
 
             {moodsForSelectedDate.length === 0 ? (
               <div className="text-center py-8 text-slate-400 dark:text-slate-500">
-                <p className="text-sm">No mood entries for this date.</p>
+                <p className="text-sm">
+                  No mood entries for{" "}
+                  {selectedDate == new Date().toISOString().split("T")[0]
+                    ? "Today"
+                    : new Date(selectedDate).toLocaleDateString("en-US", {
+                        month: "long",
+                        day: "numeric",
+                      })}
+                </p>
                 <p className="text-xs mt-1">
                   Log a mood using the panel on the left.
                 </p>
               </div>
             ) : (
-              <div className="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-3 gap-2.5">
+              <div className="grid grid-cols-2 sm:grid-cols-2 xl:grid-cols-4 gap-2.5">
                 {moodsForSelectedDate.map((mood) => (
                   <div
                     key={mood.id}
-                    className="flex items-center justify-between gap-2 px-3 py-2.5 rounded-xl bg-slate-50 dark:bg-zinc-800 border border-slate-200 dark:border-zinc-700 hover:bg-white dark:hover:bg-zinc-700 transition-colors duration-200"
+                    className="flex items-center hover:translate-y-[-4px] transition-all ease-in-out duration-300 justify-between gap-2 px-3 py-2.5 rounded-xl bg-slate-50 dark:bg-zinc-800 border border-slate-200 dark:border-zinc-700 hover:bg-white dark:hover:bg-zinc-700"
                   >
                     <div className="flex items-center gap-2.5">
                       <span className="text-xl">{mood.emoji}</span>

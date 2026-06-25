@@ -31,7 +31,7 @@ const Footer = () => {
           </div>
 
           {/* Nav links */}
-          <nav className="flex flex-col sm:flex-row sm:items-center items-start w-full sm:w-auto gap-5 flex-wrap justify-center">
+          <nav className="flex flex-col sm:flex-row items-start w-full sm:w-auto gap-5 flex-wrap justify-center">
             {footerLinks.map(({ to, label }) => (
               <NavLink
                 key={to}

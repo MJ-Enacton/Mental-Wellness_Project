@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import {
   format,
   startOfMonth,
@@ -25,7 +25,7 @@ export default function Calendar() {
 
   const dispatch = useDispatch();
   useEffect(() => {
-    dispatch(changeSelectedDate(format(selectedDate, "yyyy-MM-dd")));
+    dispatch(changeSelectedDate(format(selectedDate, "yyyy-MM-dd")))
   }, [selectedDate]);
 
   const days = eachDayOfInterval({ start: startDate, end: endDate });

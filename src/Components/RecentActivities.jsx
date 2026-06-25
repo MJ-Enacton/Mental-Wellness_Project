@@ -1,4 +1,3 @@
-import React from 'react';
 import { useSelector } from 'react-redux';
 import { MdBookmarkAdded, MdDelete } from "react-icons/md";
 import { FaEdit } from 'react-icons/fa';
@@ -6,10 +5,10 @@ import { TbMoodEdit } from "react-icons/tb";
 import { formatDistanceToNow } from 'date-fns';
 
 const iconConfig = {
-  journal_added:   { icon: MdBookmarkAdded, bg: "bg-emerald-100 dark:bg-emerald-900/40", color: "text-emerald-600 dark:text-emerald-400" },
-  journal_edited:  { icon: FaEdit,          bg: "bg-sky-100 dark:bg-sky-900/40",      color: "text-sky-600 dark:text-sky-400" },
-  journal_deleted: { icon: MdDelete,        bg: "bg-red-100 dark:bg-red-900/40",      color: "text-red-500 dark:text-red-400" },
-  mood_added:      { icon: TbMoodEdit,      bg: "bg-violet-100 dark:bg-violet-900/40",color: "text-violet-600 dark:text-violet-400" },
+  journal_added: { icon: MdBookmarkAdded,bg: "bg-emerald-100 dark:bg-emerald-900/40", color: "text-emerald-600 dark:text-emerald-400" },
+  journal_edited: { icon: FaEdit, bg: "bg-sky-100 dark:bg-sky-900/40", color: "text-sky-600 dark:text-sky-400" },
+  journal_deleted: { icon: MdDelete, bg: "bg-red-100 dark:bg-red-900/40", color: "text-red-500 dark:text-red-400" },
+  mood_added: { icon: TbMoodEdit, bg: "bg-violet-100 dark:bg-violet-900/40",color: "text-violet-600 dark:text-violet-400" },
 };
 
 const RecentActivities = () => {

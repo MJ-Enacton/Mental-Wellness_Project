@@ -20,7 +20,7 @@ const Header = () => {
   const [menuOpen, setMenuOpen] = useState(false);
 
   const desktopNavClass = ({ isActive }) =>
-    `relative px-1 py-2 text-sm font-medium transition-all duration-200 group
+    `relative px-1.5 py-2 text-sm font-medium transition-all duration-300 group
     ${
       isActive
         ? "text-emerald-600 dark:text-emerald-400"

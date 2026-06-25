@@ -10,6 +10,7 @@ import {
 } from "chart.js";
 import { Line } from "react-chartjs-2";
 import { useSelector } from "react-redux";
+import { moodScaleData } from "../Data/mood";
 
 ChartJS.register(
   LineElement,
@@ -18,16 +19,8 @@ ChartJS.register(
   CategoryScale,
   Tooltip,
   Legend,
-  Filler,
+  Filler
 );
-
-const moodScale = {
-  "😁": 5,
-  "😊": 4,
-  "😐": 3,
-  "😕": 2,
-  "😢": 1,
-};
 
 export const MoodLineChart = () => {
   const moods = useSelector((state) => state.Mood);
@@ -40,24 +33,30 @@ export const MoodLineChart = () => {
     .filter((m) => m.addedAt?.split("T")[0] === selectedDate)
     .sort((a, b) => new Date(a.addedAt) - new Date(b.addedAt));
 
-  const gridColor  = isDark ? "rgba(63, 63, 70, 0.6)"  : "rgba(203, 213, 225, 0.5)";
-  const tickColor  = isDark ? "#94a3b8"                 : "#64748b";
-  const titleColor = isDark ? "#cbd5e1"                 : "#475569";
+  // const averageMood = Math.round(moods.reduce((acc, mood) => {
+  //   const value = moodScaleData[mood.emoji] || 0;
+  //   return acc + value;
+  // }, 0) / moods.length);
+  // console.log(averageMood);
+
+  const gridColor  = isDark ? "rgba(63, 63, 70, 0.6)" : "rgba(203, 213, 225, 0.5)";
+  const tickColor  = isDark ? "#94a3b8" : "#64748b";
+  const titleColor = isDark ? "#cbd5e1" : "#475569";
 
   const data = {
     labels: filtered.map((m) => {
       const date = new Date(m.addedAt);
       return date.toLocaleTimeString("en-IN", {
         timeZone: "Asia/Kolkata",
-        hour: "2-digit",
+        hour: "numeric",
         minute: "2-digit",
-        hour12: true,
+        hour12: false,
       });
     }),
     datasets: [
       {
         label: "Mood Trend",
-        data: filtered.map((m) => moodScale[m.emoji] || 0),
+        data: filtered.map((m) => moodScaleData[m.emoji] || 0),
         borderColor: "#10b981",
         backgroundColor: isDark
           ? "rgba(16, 185, 129, 0.12)"
@@ -100,7 +99,7 @@ export const MoodLineChart = () => {
         ticks: {
           stepSize: 1,
           color: tickColor,
-          font: { family: "Inter, sans-serif", size: 11 },
+          font: { family: "Inter, sans-serif", size: 13 },
           callback: (val) => {
             const labels = { 1: "😢", 2: "😕", 3: "😐", 4: "😊", 5: "😁" };
             return labels[val] ?? val;
@@ -117,9 +116,18 @@ export const MoodLineChart = () => {
       x: {
         ticks: {
           color: tickColor,
-          font: { family: "Inter, sans-serif", size: 11 },
+          font: {
+            family: "Inter, sans-serif",
+            size: 9,
+          },
+          autoSkip: true,
+          maxTicksLimit: 4,
+          maxRotation: 0,
+          minRotation: 0,
         },
-        grid: { color: gridColor },
+        grid: {
+          color: gridColor,
+        },
       },
     },
   };

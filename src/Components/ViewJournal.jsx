@@ -1,6 +1,5 @@
 import { useNavigate, useParams } from "react-router";
 import { FaArrowLeftLong } from "react-icons/fa6";
-import { Dropdown } from "primereact/dropdown";
 import { Editor } from "primereact/editor";
 import { useSelector } from "react-redux";
 import { useState, useEffect } from "react";
@@ -13,15 +12,6 @@ const ViewJournal = () => {
   const navigate = useNavigate();
   const [selectedCategory, setSelectedCategory] = useState(null);
   const [entryDate, setEntryDate] = useState(null);
-
-  const categories = [
-    { label: "Grateful", value: "Grateful" },
-    { label: "Stressful", value: "Stressful" },
-    { label: "Achievement", value: "Achievement" },
-    { label: "Challenge", value: "Challenge" },
-    { label: "Reflection", value: "Reflection" },
-    { label: "Goal", value: "Goal" },
-  ];
 
   const categoryColors = {
     Grateful:    "bg-emerald-50 text-emerald-700 dark:bg-emerald-900/30 dark:text-emerald-400 border-emerald-200 dark:border-emerald-800",
