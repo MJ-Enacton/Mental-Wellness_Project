@@ -43,7 +43,7 @@ const AddJournal = () => {
   }, []);
 
   const handleJournalAdd = () => {
-    if (selectedCategory !== null && thought !== undefined && thought !== "") {
+    if (selectedCategory != null && thought != undefined && thought != "") {
       dispatch(
         newJournal({
           category: selectedCategory,
@@ -65,6 +65,21 @@ const AddJournal = () => {
         duration: 3000,
         position: "top-right",
       });
+      navigate("/journals");
+    } else {
+      if (selectedCategory == null) {
+        toast.error("Please select a category", {
+          duration: 3000,
+          position: "top-right",
+        });
+      }
+
+      if (thought == undefined || thought == "") {
+        toast.error("Please enter your thoughts", {
+          duration: 3000,
+          position: "top-right",
+        });
+      }
     }
   };
 
@@ -87,22 +102,21 @@ const AddJournal = () => {
 
       setThought("");
       setSelectedCategory(null);
+      navigate("/journals");
     } else {
       handleJournalAdd();
     }
 
-    navigate("/journals");
   };
 
   const isEditing = !!params.id;
 
   return (
     <div className="max-w-4xl mx-auto px-4 sm:px-6 py-8 sm:py-10 min-h-[calc(100vh-4rem)] transition-colors duration-300">
-
       {/* Page Header */}
       <div className="mb-6">
         <button
-          onClick={() => navigate("/journals")}
+          onClick={() => navigate(-1)}
           className="inline-flex items-center gap-2 text-sm text-slate-500 dark:text-slate-400 hover:text-slate-800 dark:hover:text-white hover:bg-slate-100 dark:hover:bg-zinc-800 px-3 py-2 rounded-xl transition-all duration-200 cursor-pointer mb-4"
         >
           <FaArrowLeftLong className="text-xs" />
@@ -111,9 +125,11 @@ const AddJournal = () => {
 
         <div className="flex items-center gap-3">
           <div className="w-10 h-10 rounded-xl bg-linear-to-br from-emerald-500 to-teal-600 flex items-center justify-center shadow-sm shadow-emerald-500/30">
-            {isEditing
-              ? <TbEdit className="text-white text-xl" />
-              : <TbPencil className="text-white text-xl" />}
+            {isEditing ? (
+              <TbEdit className="text-white text-xl" />
+            ) : (
+              <TbPencil className="text-white text-xl" />
+            )}
           </div>
           <div>
             <h1 className="text-2xl sm:text-3xl font-bold text-slate-800 dark:text-slate-100">
@@ -130,7 +146,6 @@ const AddJournal = () => {
 
       {/* Card */}
       <div className="rounded-2xl bg-white dark:bg-zinc-900 border border-slate-200 dark:border-zinc-800 shadow-sm p-6 sm:p-8 space-y-6">
-
         {/* Category */}
         <div>
           <label className="block text-sm font-medium text-slate-700 dark:text-slate-300 mb-2">
