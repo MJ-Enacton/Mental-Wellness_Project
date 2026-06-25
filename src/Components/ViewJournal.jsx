@@ -45,7 +45,7 @@ const ViewJournal = () => {
       {/* Page Header */}
       <div className="mb-6">
         <button
-          onClick={() => navigate("/journals")}
+          onClick={() => navigate(-1)}
           className="inline-flex items-center gap-2 text-sm text-slate-500 dark:text-slate-400 hover:text-slate-800 dark:hover:text-white hover:bg-slate-100 dark:hover:bg-zinc-800 px-3 py-2 rounded-xl transition-all duration-200 cursor-pointer mb-4"
         >
           <FaArrowLeftLong className="text-xs" />
