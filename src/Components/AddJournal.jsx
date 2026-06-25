@@ -192,7 +192,7 @@ const AddJournal = () => {
         {/* Footer actions */}
         <div className="flex items-center justify-between pt-2">
           <button
-            onClick={() => navigate("/journals")}
+            onClick={() => navigate(-1)}
             className="px-5 py-2.5 text-sm rounded-xl border border-slate-200 dark:border-zinc-700 text-slate-600 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-zinc-800 transition-all duration-200 cursor-pointer"
           >
             Cancel
