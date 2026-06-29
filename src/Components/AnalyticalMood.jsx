@@ -14,14 +14,14 @@ const AnalyticalMood = () => {
     const WeeklyAverageMood = Math.round(MoodByWeekAndYear.reduce((acc, mood) => {
       const value = moodScaleData[mood.emoji] || 0;
       return acc + value;
-    }, 0) / MoodByWeekAndYear.length);
+    }, 0) / MoodByWeekAndYear.length) || 1;
 
     const MoodByMonthAndYear = moods.filter((m) => (Number(m.addedAt.split('T')[0].split("-")[1]) == month && Number(m.addedAt.split('T')[0].split("-")[0]) == year))
 
     const MonthlyAverageMood = Math.round(MoodByMonthAndYear.reduce((acc, mood) => {
       const value = moodScaleData[mood.emoji] || 0;
       return acc + value;
-    }, 0) / MoodByMonthAndYear.length);
+    }, 0) / MoodByMonthAndYear.length) || 1;
     
 
     return (
